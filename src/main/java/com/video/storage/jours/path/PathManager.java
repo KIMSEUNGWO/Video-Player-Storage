@@ -14,5 +14,6 @@ public interface PathManager {
     }
 
     Path get(PathType pathType, String id);
+    Path get(PathType pathType);
 
 }

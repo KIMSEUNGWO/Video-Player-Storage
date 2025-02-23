@@ -33,6 +33,15 @@ public class LocalPathManager implements PathManager {
     }
 
     @Override
+    public Path get(PathType pathType) {
+        return switch (pathType) {
+            case VIDEO -> Paths.get(videoDirectory);
+            case ORIGINAL_VIDEO -> Paths.get(originalVideoDirectory);
+            case THUMBNAIL -> Paths.get(imageDirectory);
+        };
+    }
+
+    @Override
     public Path generateOnlyPath(Supplier<Path> randomGeneratePath) {
         Path newPath = null;
         do {
