@@ -6,12 +6,14 @@ import com.video.storage.jours.path.PathType;
 import com.video.storage.jours.service.ImageService;
 import com.video.storage.jours.service.VideoService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/upload")
@@ -23,21 +25,21 @@ public class UploadController {
 
     @PostMapping("/thumbnail")
     public ResponseEntity<StorageResponse> uploadThumbnail(@RequestParam("file") MultipartFile image) throws IOException {
-        System.out.println("image.getOriginalFilename() = " + image.getOriginalFilename());
+        log.info("UPLOAD Thumbnail : {} ", image.getOriginalFilename());
         String storeKey = imageService.uploadThumbnail(image);
         return ResponseEntity.ok(new StorageResponse(storeKey, "Thumbnail uploaded successfully"));
     }
 
     @PostMapping("/original")
     public ResponseEntity<StorageResponse> uploadOriginalVideo(@RequestParam("file") MultipartFile originalVideo) throws IOException {
-        System.out.println("originalVideo.getOriginalFilename() = " + originalVideo.getOriginalFilename());
+        log.info("UPLOAD Original Video : {} ", originalVideo.getOriginalFilename());
         String storeKey = videoService.uploadOriginalVideo(originalVideo);
         return ResponseEntity.ok(new StorageResponse(storeKey, "Original video uploaded successfully"));
     }
 
     @PostMapping("/hls")
     public ResponseEntity<Void> uploadHls(@RequestParam("file") MultipartFile zipFile) throws IOException {
-        System.out.println("UploadController.uploadHls");
+        log.info("UPLOAD HLS VIDEO : {} ", zipFile.getOriginalFilename());
         zipService.unzip(PathType.VIDEO, zipFile);
         return ResponseEntity.ok().build();
     }

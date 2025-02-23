@@ -18,7 +18,27 @@ public class ImageConverter {
     @Value("${path.ffmpeg}")
     private String ffmpegPath;
 
-    public void convertToWebP(Path beforeImage, Path afterImage, int quality) throws IOException {
+    public Path convertToWebP(MultipartFile image, Path outputPath, int quality) throws IOException {
+        String originalFilename = image.getOriginalFilename();
+
+        // 임시 파일 생성
+        Path tempFile = Files.createTempFile("upload_", "_" + originalFilename);
+
+        try {
+            // MultipartFile을 임시 파일로 저장
+            Files.copy(image.getInputStream(), tempFile, StandardCopyOption.REPLACE_EXISTING);
+
+            // WebP로 변환
+            convertToWebP(tempFile, outputPath, quality);
+
+            return outputPath;
+        } finally {
+            // 임시 파일 삭제
+            Files.deleteIfExists(tempFile);
+        }
+    }
+
+    private void convertToWebP(Path beforeImage, Path afterImage, int quality) throws IOException {
 
         // 품질 0 - 100 으로 변환
         int validQuality = Math.min(100, Math.max(0, quality));
@@ -44,26 +64,6 @@ public class ImageConverter {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new IOException("FFmpeg process interrupted", e);
-        }
-    }
-
-    public Path convertToWebP(MultipartFile image, Path outputPath, int quality) throws IOException {
-        String originalFilename = image.getOriginalFilename();
-
-        // 임시 파일 생성
-        Path tempFile = Files.createTempFile("upload_", "_" + originalFilename);
-
-        try {
-            // MultipartFile을 임시 파일로 저장
-            Files.copy(image.getInputStream(), tempFile, StandardCopyOption.REPLACE_EXISTING);
-
-            // WebP로 변환
-            convertToWebP(tempFile, outputPath, quality);
-
-            return outputPath;
-        } finally {
-            // 임시 파일 삭제
-            Files.deleteIfExists(tempFile);
         }
     }
 

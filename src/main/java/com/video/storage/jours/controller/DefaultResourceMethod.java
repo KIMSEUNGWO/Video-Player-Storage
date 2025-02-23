@@ -11,6 +11,6 @@ public interface DefaultResourceMethod {
         return new UrlResource(path.toUri());
     }
     default UrlResource resource(String path) throws MalformedURLException {
-        return new UrlResource("file:".concat(path));
+        return new UrlResource(String.format("file:%s", path));
     }
 }

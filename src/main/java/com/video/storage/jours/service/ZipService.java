@@ -20,25 +20,29 @@ public class ZipService {
     private final PathManager pathManager;
 
     public void unzip(PathType pathType, MultipartFile zipFile) throws IOException {
-
-        Path path = pathManager.get(pathType);
+        Path basePath = pathManager.get(pathType);
 
         try (ZipInputStream zis = new ZipInputStream(zipFile.getInputStream())) {
             ZipEntry entry;
             while ((entry = zis.getNextEntry()) != null) {
-                Path filePath = path.resolve(entry.getName());
-
-                // 디렉토리 생성
-                if (entry.isDirectory()) {
-                    Files.createDirectories(filePath);
-                } else {
-                    Files.createDirectories(filePath.getParent());
-                    Files.copy(zis, filePath, StandardCopyOption.REPLACE_EXISTING);
+                try {
+                    extractEntry(zis, entry, basePath);
+                } finally {
+                    zis.closeEntry();
                 }
-
-                zis.closeEntry();
             }
         }
+    }
 
+    private void extractEntry(ZipInputStream zis, ZipEntry entry, Path basePath) throws IOException {
+        Path filePath = basePath.resolve(entry.getName());
+
+        if (entry.isDirectory()) {
+            Files.createDirectories(filePath);
+            return;
+        }
+
+        Files.createDirectories(filePath.getParent());
+        Files.copy(zis, filePath, StandardCopyOption.REPLACE_EXISTING);
     }
 }

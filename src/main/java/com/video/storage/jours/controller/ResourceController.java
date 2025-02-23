@@ -33,13 +33,13 @@ public class ResourceController implements DefaultResourceMethod {
 
     @GetMapping("/video/{videoId}/{master}.m3u8")
     public Resource downloadVideo(@PathVariable String videoId, @PathVariable String master) throws MalformedURLException {
-        String playlistPath = pathManager.get(VIDEO, videoId) + "/" + master + ".m3u8";
+        Path playlistPath = pathManager.get(VIDEO, videoId, String.format("%s.m3u8", master));
         return resource(playlistPath);
     }
 
     @GetMapping("/video/{videoId}/{stream}/{segment}")
     public Resource downloadPlaylist(@PathVariable String videoId, @PathVariable String stream, @PathVariable String segment) throws MalformedURLException {
-        String segmentPath = pathManager.get(VIDEO, videoId) + "/" + stream + "/" + segment;
+        Path segmentPath = pathManager.get(VIDEO, videoId, stream, segment);
         return resource(segmentPath);
     }
 

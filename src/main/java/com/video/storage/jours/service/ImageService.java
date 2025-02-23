@@ -1,6 +1,7 @@
 package com.video.storage.jours.service;
 
 import com.video.storage.jours.component.ImageConverter;
+import com.video.storage.jours.path.Extension;
 import com.video.storage.jours.path.PathManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,9 +22,7 @@ public class ImageService {
 
     public String uploadThumbnail(MultipartFile thumbnail) throws IOException {
 
-        Path thumbnailPath = pathManager.generateOnlyPath(() ->
-            pathManager.get(THUMBNAIL, pathManager.generateNewPath(".webp"))
-        );
+        Path thumbnailPath = pathManager.generateOnlyPath(THUMBNAIL, Extension.WEBP);
 
         imageConverter.convertToWebP(thumbnail, thumbnailPath,100);
         return thumbnailPath.getFileName().toString();

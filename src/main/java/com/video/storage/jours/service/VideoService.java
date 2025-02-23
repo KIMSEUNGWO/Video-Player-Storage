@@ -20,9 +20,7 @@ public class VideoService {
     private final PathManager pathManager;
 
     public String uploadOriginalVideo(MultipartFile originalVideo) throws IOException {
-        Path originalVideoFilePath = pathManager.generateOnlyPath(() ->
-            pathManager.get(ORIGINAL_VIDEO, pathManager.generateNewPath())
-        );
+        Path originalVideoFilePath = pathManager.generateOnlyPath(ORIGINAL_VIDEO);
 
         // 필요한 디렉토리 생성
         Files.createDirectories(originalVideoFilePath.getParent());

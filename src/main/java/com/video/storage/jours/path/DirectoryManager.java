@@ -18,7 +18,7 @@ public class DirectoryManager {
     private final SimpleFileVisitor<Path> deleteVisitor;
 
     public void delete(PathType pathType, String id) {
-        if (id != null) {
+        if (pathType != null && id != null && !id.isBlank()) {
             deleteIfExists(pathManager.get(pathType, id));
         }
     }

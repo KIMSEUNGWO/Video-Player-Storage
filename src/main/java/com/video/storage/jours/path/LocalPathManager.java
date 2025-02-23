@@ -23,36 +23,42 @@ public class LocalPathManager implements PathManager {
     @Value("${directory.image}")
     private String imageDirectory;
 
+
     @Override
-    public Path get(PathType pathType, String id) {
-        return switch (pathType) {
-            case VIDEO -> Paths.get(videoDirectory + "/" + id);
-            case ORIGINAL_VIDEO -> Paths.get(originalVideoDirectory + "/" + id);
-            case THUMBNAIL -> Paths.get(imageDirectory + "/" + id);
-        };
+    public Path get(PathType pathType, String... ids) {
+        return Paths.get(getPath(pathType), ids);
     }
 
     @Override
     public Path get(PathType pathType) {
+        return Paths.get(getPath(pathType));
+    }
+
+    private String getPath(PathType pathType) {
         return switch (pathType) {
-            case VIDEO -> Paths.get(videoDirectory);
-            case ORIGINAL_VIDEO -> Paths.get(originalVideoDirectory);
-            case THUMBNAIL -> Paths.get(imageDirectory);
+            case VIDEO -> videoDirectory;
+            case ORIGINAL_VIDEO -> originalVideoDirectory;
+            case THUMBNAIL -> imageDirectory;
         };
     }
 
     @Override
-    public Path generateOnlyPath(Supplier<Path> randomGeneratePath) {
-        Path newPath = null;
-        do {
-            newPath = randomGeneratePath.get();
-        } while (Files.exists(newPath));
-        return newPath;
+    public Path generateOnlyPath(PathType pathType, Extension extension) {
+        return generate(pathType, generateNewPath(extension));
     }
 
     @Override
-    public String generateNewPath() {
-        return UUID.randomUUID().toString();
+    public Path generateOnlyPath(PathType pathType) {
+        return generate(pathType, generateNewPath());
+    }
+
+    private Path generate(PathType pathType, String resolve) {
+        Path path = get(pathType);
+        Path newPath = null;
+        do {
+            newPath = path.resolve(resolve);
+        } while (Files.exists(newPath));
+        return newPath;
     }
 
 

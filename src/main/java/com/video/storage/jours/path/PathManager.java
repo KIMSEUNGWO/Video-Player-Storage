@@ -1,19 +1,22 @@
 package com.video.storage.jours.path;
 
 import java.nio.file.Path;
-import java.util.function.Supplier;
+import java.util.UUID;
 
 public interface PathManager {
 
-    Path generateOnlyPath(Supplier<Path> pathSupplier);
+    Path generateOnlyPath(PathType pathType, Extension extension);
+    Path generateOnlyPath(PathType pathType);
 
-    String generateNewPath();
+    Path get(PathType pathType, String... ids);
+    Path get(PathType pathType);
 
-    default String generateNewPath(String extension) {
-        return generateNewPath() + extension;
+    default String generateNewPath() {
+        return UUID.randomUUID().toString();
     }
 
-    Path get(PathType pathType, String id);
-    Path get(PathType pathType);
+    default String generateNewPath(Extension extension) {
+        return extension.appendTo(generateNewPath());
+    }
 
 }
