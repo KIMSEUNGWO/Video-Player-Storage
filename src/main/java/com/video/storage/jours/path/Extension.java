@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public enum Extension {
 
+    M3U8("m3u8"),
     WEBP(".webp");
 
     private final String extension;

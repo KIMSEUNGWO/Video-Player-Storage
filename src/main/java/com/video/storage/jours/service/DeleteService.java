@@ -1,7 +1,6 @@
 package com.video.storage.jours.service;
 
 import com.video.storage.jours.path.DirectoryManager;
-import com.video.storage.jours.path.PathManager;
 import com.video.storage.jours.path.PathType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

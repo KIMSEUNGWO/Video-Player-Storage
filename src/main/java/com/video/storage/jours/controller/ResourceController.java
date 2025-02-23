@@ -1,7 +1,6 @@
 package com.video.storage.jours.controller;
 
 import com.video.storage.jours.path.PathManager;
-import com.video.storage.jours.path.PathType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 
+import static com.video.storage.jours.path.Extension.M3U8;
 import static com.video.storage.jours.path.PathType.*;
 
 @RestController
@@ -33,7 +33,7 @@ public class ResourceController implements DefaultResourceMethod {
 
     @GetMapping("/video/{videoId}/{master}.m3u8")
     public Resource downloadVideo(@PathVariable String videoId, @PathVariable String master) throws MalformedURLException {
-        Path playlistPath = pathManager.get(VIDEO, videoId, String.format("%s.m3u8", master));
+        Path playlistPath = pathManager.get(VIDEO, videoId, M3U8.appendTo(master));
         return resource(playlistPath);
     }
 
