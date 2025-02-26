@@ -1,6 +1,6 @@
 package com.video.storage.jours.service;
 
-import com.video.storage.jours.component.ImageConverter;
+import com.jours.easy_ffmpeg.FFmpegConverter;
 import com.video.storage.jours.path.Extension;
 import com.video.storage.jours.path.PathManager;
 import lombok.RequiredArgsConstructor;
@@ -18,13 +18,13 @@ import static com.video.storage.jours.path.PathType.*;
 public class ImageService {
 
     private final PathManager pathManager;
-    private final ImageConverter imageConverter;
+    private final FFmpegConverter fFmpegConverter;
 
     public String uploadThumbnail(MultipartFile thumbnail) throws IOException {
 
         Path thumbnailPath = pathManager.generateOnlyPath(THUMBNAIL, Extension.WEBP);
 
-        imageConverter.convertToWebP(thumbnail, thumbnailPath,100);
+        fFmpegConverter.convertToWebP(thumbnail, thumbnailPath, 100);
         return thumbnailPath.getFileName().toString();
     }
 

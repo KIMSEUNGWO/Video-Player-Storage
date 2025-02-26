@@ -30,7 +30,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-	implementation 'net.bramp.ffmpeg:ffmpeg:0.7.0'
+	implementation 'io.github.kimseungwo:easy-ffmpeg:0.0.2'
+
 }
 
 tasks.named('test') {
